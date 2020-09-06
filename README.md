@@ -40,7 +40,9 @@ This analysis contains there components:
 3. Go to http://0.0.0.0:3001/
 
 ## Results:
-Overall Average Accuracy for final model is 0.987684337656.
+Overall average accuracy for final model is 0.987684337656. 
+Here is the screenshot of f1 score, precision and recall for one of 36 categories:
+![result screenshot]("models/related result.png")
 
 ## Data Source:
-Disaster data is provided from Figure Eight.
+Disaster data is from Figure Eight.
