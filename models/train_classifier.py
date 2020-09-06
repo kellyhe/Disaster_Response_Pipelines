@@ -20,7 +20,10 @@ nltk.download(['punkt', 'wordnet', 'averaged_perceptron_tagger','stopwords'])
 
 
 def load_data(database_filepath):
-    """ load the clean dataset from an sqlite database."""
+    """ Load the clean dataset from an sqlite database.
+        Input: database filepath
+        Outputs: Feature data X, target data Y and category names list
+    """
     engine = create_engine('sqlite:///'+ database_filepath)
     df = pd.read_sql("SELECT * FROM disaster_response", engine)
     X = df.message.values
@@ -31,9 +34,10 @@ def load_data(database_filepath):
 
 
 def tokenize(text):
-    """process text data:
-       tokenize and lemmatize the message 
-       and remove stopwords """
+    """process text data: tokenize and lemmatize the message and remove stopwords.
+       Input: text message
+       Output: clean tokenized list
+    """
     tokens = word_tokenize(text)
     lemmatizer = WordNetLemmatizer()
     
@@ -47,8 +51,10 @@ def tokenize(text):
 
 
 def build_model():
-    """ Build a machine learning pipeline,
-    and use grid search to find better parameters."""
+    """ Build a machine learning pipeline, and use grid search to find better parameters.
+       Input: -
+       Output: best performance model
+    """
     pipeline = Pipeline([
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
@@ -65,9 +71,11 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    """Show overall avg accuracy,
-       and the f1 score, precision and recall for each 
-       output category of the dataset."""
+    """Show overall avg accuracy, and the f1 score, precision and recall for each 
+       output category of the dataset.
+       Inputs: model, X test data, Y test data, category names list
+       Output: print performance metrics
+    """
     y_pred = model.predict(X_test)
     accuracy = (y_pred == Y_test).mean().mean()
     print("Overall Accuracy:", accuracy)
@@ -76,11 +84,14 @@ def evaluate_model(model, X_test, Y_test, category_names):
     for i in range(len(category_names)):
         print(category_names[i])
         print("\nClassification Report:\n", classification_report(Y_test.iloc[:,i], \
-                  pd.DataFrame(y_pred).iloc[:,i], target_names=category_names[i]))
+                  pd.DataFrame(y_pred).iloc[:,i])) #, target_names=category_names[i]
 
 
 def save_model(model, model_filepath):
-    """Export model as a pickle file"""
+    """Export model as a pickle file.
+       Inputs: model, model filepath
+       Output: save as a pickle file
+    """
     pickle.dump(model, open(model_filepath, 'wb'))
 
 

@@ -5,7 +5,10 @@ import sys
 
 
 def load_data(messages_filepath, categories_filepath):
-    """ load and merge messages dataset and categories dataset"""
+    """ load and merge messages dataset and categories dataset
+        Inputs: messages data filepath, categories data filepath
+        Output: merged dataset
+    """
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
     df = messages.merge(categories, on ="id",how='inner')
@@ -13,9 +16,12 @@ def load_data(messages_filepath, categories_filepath):
 
 
 def clean_data(df):
-    """1. Drop duplicates;
-       2. Split categories (36 target measures)
-    """ 
+    """Clean dataset including:
+       1. Drop duplicates;
+       2. Split categories into separate category columns. (36 target measures)
+       Input: merged data frame
+       Output: cleaned data frame
+    """
     # Drop duplicates
     df = df.drop_duplicates()
     # Split categories into separate category columns
@@ -33,7 +39,10 @@ def clean_data(df):
     return df
 
 def save_data(df, database_filename):
-    """Save the clean dataset into an sqlite database."""
+    """Save the clean dataset into an sqlite database.
+       Inputs: data, database filename
+       Output: saved data into an sqlite database
+    """
     engine = create_engine('sqlite:///'+ database_filename)
     df.to_sql('disaster_response', engine, index=False, if_exists='replace')
     
